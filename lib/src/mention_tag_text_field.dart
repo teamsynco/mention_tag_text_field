@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'dart:ui' as ui;
 
 import 'package:flutter/gestures.dart';
@@ -115,16 +114,14 @@ class MentionTagTextField extends TextField {
   /// You don't need to add mention symbol later when setting mentions during editing using _controller.setMention, you can do _controller.setMention("rowan", null) and corresponding mention symbol will be added automatically.
   final List<(String, Object?, Widget?)> initialMentions;
 
-  static Widget _defaultContextMenuBuilder(
-      BuildContext context, EditableTextState editableTextState) {
+  static Widget _defaultContextMenuBuilder(BuildContext context, EditableTextState editableTextState) {
     return AdaptiveTextSelectionToolbar.editableText(
       editableTextState: editableTextState,
     );
   }
 
   void _setControllerProperties(
-      MentionTagTextEditingController? mentionController,
-      List<(String, Object?, Widget?)> initialMentions) {
+      MentionTagTextEditingController? mentionController, List<(String, Object?, Widget?)> initialMentions) {
     if (mentionController == null) return;
     mentionController.mentionTagDecoration = mentionTagDecoration;
     mentionController.onMention = onMention;
@@ -245,16 +242,14 @@ class MentionTagTextFormField extends TextFormField {
   /// You don't need to add mention symbol later when setting mentions during editing using _controller.setMention, you can do _controller.setMention("rowan", null) and corresponding mention symbol will be added automatically.
   final List<(String, Object?, Widget?)> initialMentions;
 
-  static Widget _defaultContextMenuBuilder(
-      BuildContext context, EditableTextState editableTextState) {
+  static Widget _defaultContextMenuBuilder(BuildContext context, EditableTextState editableTextState) {
     return AdaptiveTextSelectionToolbar.editableText(
       editableTextState: editableTextState,
     );
   }
 
   void _setControllerProperties(
-      MentionTagTextEditingController? mentionController,
-      List<(String, Object?, Widget?)> initialMentions) {
+      MentionTagTextEditingController? mentionController, List<(String, Object?, Widget?)> initialMentions) {
     if (mentionController == null) return;
     mentionController.mentionTagDecoration = mentionTagDecoration;
     mentionController.onMention = onMention;

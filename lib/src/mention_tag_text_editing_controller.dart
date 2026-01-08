@@ -150,12 +150,34 @@ class MentionTagTextEditingController extends TextEditingController {
   }
 
   void insertMentionDirectly(MentionTagElement mentionTagElement) {
-    final indexCursor = max(selection.base.offset, 0);
+    final rawIndexCursor = max(selection.base.offset, 0);
+    final indexCursor = min(rawIndexCursor, super.text.length);
 
+    final breakText = mentionTagDecoration.mentionBreak;
+
+    var before = super.text.substring(0, indexCursor);
+    var after = super.text.substring(indexCursor);
+
+    final shouldInsertBeforeBreak = breakText.isNotEmpty && before.isNotEmpty && !_endsWithWhitespace.hasMatch(before);
+    final shouldInsertAfterBreak = breakText.isNotEmpty && (after.isEmpty || !_startsWithWhitespace.hasMatch(after));
+
+    if (shouldInsertBeforeBreak) {
+      before += breakText;
+    }
+
+    if (shouldInsertAfterBreak) {
+      after = breakText + after;
+    }
+
+    final mentionInsertionIndex = before.length;
+    // `_insertMention` indexes into the current (pre-insertion) `super.text`.
+    // `mentionInsertionIndex` is an index into the *new* text (after optional breaks),
+    // so it can exceed `super.text.length` (e.g. inserting at end adds a space).
     _insertMention(indexCursor, mentionTagElement);
-    _cursorPosition = indexCursor + 1;
 
-    final newText = super.text.substring(0, indexCursor) + Constants.mentionEscape + super.text.substring(indexCursor);
+    _cursorPosition = mentionInsertionIndex + 1 + (shouldInsertAfterBreak ? breakText.length : 0);
+
+    final newText = before + Constants.mentionEscape + after;
     super.value = TextEditingValue(
       text: newText,
       selection: TextSelection.collapsed(offset: _cursorPosition),
